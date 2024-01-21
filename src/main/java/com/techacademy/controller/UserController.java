@@ -1,5 +1,7 @@
 package com.techacademy.controller;
 
+import java.util.Set; // 追加
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam; // 追加
 
 import com.techacademy.entity.User;
 import com.techacademy.service.UserService;
@@ -28,6 +31,7 @@ public class UserController {
         // user/list.htmlに画面遷移
         return "user/list";
     }
+
     /** User登録画面を表示 */
     @GetMapping("/register")
     public String getRegister(@ModelAttribute User user) {
@@ -43,7 +47,7 @@ public class UserController {
         // 一覧画面にリダイレクト
         return "redirect:/user/list";
     }
- // ----- 追加:ここから -----
+
     /** User更新画面を表示 */
     @GetMapping("/update/{id}/")
     public String getUser(@PathVariable("id") Integer id, Model model) {
@@ -61,6 +65,15 @@ public class UserController {
         // 一覧画面にリダイレクト
         return "redirect:/user/list";
     }
+
+    // ----- 追加:ここから -----
+    /** User削除処理 */
+    @PostMapping(path="list", params="deleteRun")
+    public String deleteRun(@RequestParam(name="idck") Set<Integer> idck, Model model) {
+        // Userを一括削除
+        service.deleteUser(idck);
+        // 一覧画面にリダイレクト
+        return "redirect:/user/list";
+    }
     // ----- 追加:ここまで -----
 }
-
